@@ -5,17 +5,19 @@ import './Table.css';
 
 class Table extends Component {
     render() {
-        // const rows = [...this.props.shows].map((show, index) => {
-        //     return (
-        //         <tr key={index}>
-        //             <th>{index + 1}</th>
-        //             <td>n/a</td>
-        //             <td>{show.show.title}</td>
-        //             <td>{show.show.year}</td>
-        //             <td>n/a</td>
-        //         </tr>
-        //     );
-        // });
+        let rows = [];
+        this.props.shows.forEach((show, index) => {
+            console.log(show);
+            rows.push(
+                <tr key={index}>
+                    <th>{index + 1}</th>
+                    <td>n/a</td>
+                    <td>{show.show.title}</td>
+                    <td>{show.show.year}</td>
+                    <td>n/a</td>
+                </tr>
+            );
+        });
         return (
             <table>
                 <caption>
@@ -31,7 +33,7 @@ class Table extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {/* {rows} */}
+                    {rows}
                 </tbody>
             </table>
         );

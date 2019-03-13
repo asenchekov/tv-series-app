@@ -97,16 +97,8 @@ class App extends Component {
       <Provider store={store}>
         <Header />
         <UserInput />
-        <Table
-          shows={this.state.shows}
-          tableCaption={this.state.table}
-          page={this.state.page}
-        />
-        <ButtonNext
-          currentPage={this.state.page}
-          changeNext={this.changeNext}
-          changePrevious={this.changePrevious}
-        />
+        <Table />
+        <ButtonNext />
       </Provider>
     );
   }

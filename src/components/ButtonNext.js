@@ -18,7 +18,7 @@ class ButtonNext extends Component {
   }
 
   //implement this with the functions up top
-  increment = () => {
+  nextPage = () => {
     this.props.dispatch({ type: 'INCREMENT' });
   }
 
@@ -26,12 +26,21 @@ class ButtonNext extends Component {
     this.props.dispatch({ type: 'DECREMENT' });
   }
     */
+
+    nextPage = () => {
+        this.props.dispatch({ type: 'NEXT_PAGE' });
+    }
+
+    previousPage = () => {
+        this.props.dispatch({ type: 'PREVIOUS_PAGE' });
+    }
+
     render() {
         return (
             <div>
-                <button onClick={this.props.changePrevious}>PREV</button>
+                <button onClick={this.previousPage}>PREV</button>
                 <span>{this.props.currentPage}</span>
-                <button onClick={this.props.changeNext}>NEXT</button>
+                <button onClick={this.nextPage}>NEXT</button>
             </div>
         );
     }
