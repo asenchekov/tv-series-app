@@ -1,20 +1,12 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import store from './store';
 
 import './App.css';
 import Header from './components/Header';
 import UserInput from './components/UserInput';
 import Table from './components/Table';
 import ButtonNext from './components/ButtonNext';
-
-const initialState = {
-  shows: [],
-  imageLinks: [],
-  page: 1,
-  limit: 5,
-  tableCaption: ''
-};
 
 /* 
   changeNext() {
@@ -98,23 +90,6 @@ const initialState = {
     });
   }
 */
-
-function reducer(state = initialState, action) {
-  switch(action.type) {
-    case 'INCREMENT':
-      return {
-        count: state.count + 1
-      };
-    case 'DECREMENT':
-      return {
-        count: state.count - 1
-      };
-    default:
-      return state;
-  }
-}
-
-const store = createStore(reducer);
 
 class App extends Component {
   render() {

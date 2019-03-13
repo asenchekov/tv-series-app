@@ -1,20 +1,21 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import './Table.css';
 
 class Table extends Component {
     render() {
-        const rows = [...this.props.shows].map((show, index) => {
-            return (
-                <tr key={index}>
-                    <th>{index + 1}</th>
-                    <td></td>
-                    <td>{show.show.title}</td>
-                    <td>{show.show.year}</td>
-                    <td>n/a</td>
-                </tr>
-            );
-        });
+        // const rows = [...this.props.shows].map((show, index) => {
+        //     return (
+        //         <tr key={index}>
+        //             <th>{index + 1}</th>
+        //             <td>n/a</td>
+        //             <td>{show.show.title}</td>
+        //             <td>{show.show.year}</td>
+        //             <td>n/a</td>
+        //         </tr>
+        //     );
+        // });
         return (
             <table>
                 <caption>
@@ -30,11 +31,19 @@ class Table extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {rows}
+                    {/* {rows} */}
                 </tbody>
             </table>
         );
     }
 }
 
-export default Table;
+function mapStateToProps(state) {
+    return {
+        shows: state.shows,
+        imageLinks: state.imageLinks,
+        tableCaption: state.tableCaption
+    };
+}
+
+export default connect(mapStateToProps)(Table);
