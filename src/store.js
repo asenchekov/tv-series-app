@@ -13,7 +13,8 @@ function reducer(state = initialState, action) {
             return {
                 ...state,
                 isLoading: false,
-                shows: action.data
+                shows: action.data.shows,
+                imageLinks: action.data.imageLinks
             }
         case 'NEXT_PAGE':
             return nextPage(state);
@@ -32,7 +33,7 @@ function reducer(state = initialState, action) {
     imageLinks: [],
     currentPage: 1,
     limit: 10,
-    tableCaption: '',
+    tableCaption: 'Trending',
     table: 'trending'
 };
 

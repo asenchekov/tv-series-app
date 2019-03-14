@@ -30,7 +30,7 @@ import ButtonNext from './components/ButtonNext';
 
 class App extends Component {
   componentDidMount() {
-    store.dispatch(fetchShowsData());
+    store.dispatch(fetchShowsData(store.getState()));
   }
 
   render() {

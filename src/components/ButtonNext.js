@@ -1,23 +1,26 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchShowsData } from '../actions/index';
+import store from '../store';
 
 
 class ButtonNext extends Component {
     nextPage = () => {
         this.props.dispatch({ type: 'NEXT_PAGE' });
-        this.props.dispatch(fetchShowsData({
-          ...this.props.store,
-          currentPage: this.props.currentPage + 1
-        }));
+        this.props.dispatch(fetchShowsData(
+          store.getState()
+          // ...this.props.store,
+          // currentPage: this.props.currentPage + 1
+        ));
     }
 
     previousPage = () => {
         this.props.dispatch({ type: 'PREVIOUS_PAGE' });
-        this.props.dispatch(fetchShowsData({
-          ...this.props.store,
-          currentPage: this.props.currentPage - 1
-        }));
+        this.props.dispatch(fetchShowsData(
+          store.getState()
+          // ...this.props.store,
+          // currentPage: this.props.currentPage - 1
+        ));
     }
 
     render() {
@@ -33,9 +36,6 @@ class ButtonNext extends Component {
 
 function mapStateToProps(state) {
     return {
-      store: {
-        ...state
-      },
         currentPage: state.currentPage
     };
 }
