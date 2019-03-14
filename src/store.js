@@ -1,8 +1,20 @@
-import { createStore } from 'redux';
-import { getInitialState, nextPage, previousPage } from './actions/index';
+import { createStore, applyMiddleware } from 'redux';
+import { nextPage, previousPage } from './actions/index';
+import thunk from 'redux-thunk';
 
 function reducer(state = initialState, action) {
     switch(action.type) {
+        case 'GET_API_DATA_START':
+            return {
+                ...state,
+                isLoading: true
+            }
+        case 'GET_API_DATA_READY':
+            return {
+                ...state,
+                isLoading: false,
+                shows: action.data
+            }
         case 'NEXT_PAGE':
             return nextPage(state);
 
@@ -14,8 +26,18 @@ function reducer(state = initialState, action) {
     }
   }
 
-const initialState = getInitialState();
+ export const initialState = {
+    shows: [],
+    isLoading: true,
+    imageLinks: [],
+    currentPage: 1,
+    limit: 10,
+    tableCaption: '',
+    table: 'trending'
+};
 
-const store = createStore(reducer);
+const store = createStore(
+    reducer,
+    applyMiddleware(thunk));
 
 export default store;

@@ -5,19 +5,22 @@ import './Table.css';
 
 class Table extends Component {
     render() {
-        let rows = [];
-        this.props.shows.forEach((show, index) => {
-            console.log(show);
-            rows.push(
-                <tr key={index}>
-                    <th>{index + 1}</th>
-                    <td>n/a</td>
-                    <td>{show.show.title}</td>
-                    <td>{show.show.year}</td>
-                    <td>n/a</td>
-                </tr>
+        if(this.props.isLoading) {
+            return (
+                <div>LOADING...</div>
             );
+        }
+
+        let rows = this.props.shows.map((show, i) => {
+            return <tr key={i}>
+                        <th>{i + 1}</th>
+                        <td>n/a</td>
+                        <td>{show.show.title}</td>
+                        <td>{show.show.year}</td>
+                        <td>n/a</td>
+                    </tr>
         });
+
         return (
             <table>
                 <caption>
@@ -44,6 +47,7 @@ function mapStateToProps(state) {
     return {
         shows: state.shows,
         imageLinks: state.imageLinks,
+        isLoading: state.isLoading,
         tableCaption: state.tableCaption
     };
 }
