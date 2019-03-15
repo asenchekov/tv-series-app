@@ -11,10 +11,13 @@ function reducer(state = initialState, action) {
             }
         case 'GET_API_DATA_READY':
             return {
-                ...state,
+                ...action.data,
                 isLoading: false,
-                shows: action.data.shows,
-                imageLinks: action.data.imageLinks
+            }
+        case 'GET_API_DATA_ERROR':
+            return {
+                ...state,
+                error: action.error
             }
         case 'NEXT_PAGE':
             return nextPage(state);

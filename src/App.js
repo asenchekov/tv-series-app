@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import store from './store';
-import { fetchShowsData } from './actions/index';
+import { fetchData } from './actions/index';
+import { fetchImages } from './actions/index';
 
 import './App.css';
 import Header from './components/Header';
@@ -30,8 +31,10 @@ import ButtonNext from './components/ButtonNext';
 
 class App extends Component {
   componentDidMount() {
-    store.dispatch(fetchShowsData(store.getState()));
+    store.dispatch(fetchData(store.getState()));
+    store.dispatch(fetchImages(store.getState()));
   }
+  
 
   render() {
     return (

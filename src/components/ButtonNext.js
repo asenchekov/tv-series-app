@@ -1,26 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchShowsData } from '../actions/index';
+import { fetchData } from '../actions/index';
 import store from '../store';
 
 
 class ButtonNext extends Component {
     nextPage = () => {
         this.props.dispatch({ type: 'NEXT_PAGE' });
-        this.props.dispatch(fetchShowsData(
-          store.getState()
-          // ...this.props.store,
-          // currentPage: this.props.currentPage + 1
-        ));
+        this.props.dispatch(fetchData( store.getState()));
     }
 
     previousPage = () => {
         this.props.dispatch({ type: 'PREVIOUS_PAGE' });
-        this.props.dispatch(fetchShowsData(
-          store.getState()
-          // ...this.props.store,
-          // currentPage: this.props.currentPage - 1
-        ));
+        this.props.dispatch(fetchData(store.getState()));
     }
 
     render() {

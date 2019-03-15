@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { fetchData } from '../actions/index';
+import store from '../store';
 
 import './Table.css';
 
 class Table extends Component {
+
+    // componentDidMount() {
+    //     this.props.dispatch(fetchImages(store.getState()));
+    // }
+
     render() {
         if(this.props.isLoading) {
             return (
