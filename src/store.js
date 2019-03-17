@@ -1,6 +1,7 @@
 import { createStore, applyMiddleware } from 'redux';
 import { nextPage, previousPage } from './actions/index';
 import thunk from 'redux-thunk';
+import logger from 'redux-logger';
 
 function reducer(state = initialState, action) {
     switch(action.type) {
@@ -11,7 +12,8 @@ function reducer(state = initialState, action) {
             }
         case 'GET_API_DATA_READY':
             return {
-                ...action.data,
+                ...state,
+                shows: action.data.shows,
                 isLoading: false,
             }
         case 'GET_API_DATA_ERROR':
@@ -33,7 +35,6 @@ function reducer(state = initialState, action) {
  export const initialState = {
     shows: [],
     isLoading: true,
-    imageLinks: [],
     currentPage: 1,
     limit: 10,
     tableCaption: 'Trending',
@@ -42,6 +43,6 @@ function reducer(state = initialState, action) {
 
 const store = createStore(
     reducer,
-    applyMiddleware(thunk));
+    applyMiddleware(thunk, logger));
 
 export default store;

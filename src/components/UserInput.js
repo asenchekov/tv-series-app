@@ -1,9 +1,18 @@
 import React, { Component } from 'react';
 
+import './UserInput.css';
+
 
 class UserInput extends Component {
     render() {
-        return <input type="text" />
+        return (
+            <div id="userInput">
+                <input type="text" />
+                <button>Search...</button>
+                <input type="checkbox" /> sort by ........
+                <input type="checkbox" /> sort by ........
+            </div>
+        );
     }
 }
 

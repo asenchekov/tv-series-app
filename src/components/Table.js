@@ -1,45 +1,32 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchData } from '../actions/index';
-import store from '../store';
 
 import './Table.css';
 
 class Table extends Component {
 
-    // componentDidMount() {
-    //     this.props.dispatch(fetchImages(store.getState()));
-    // }
-
     render() {
         if(this.props.isLoading) {
             return (
-                <div>LOADING...</div>
+                <div id="loadingSVG">
+                    <img src='91.svg' alt='...LOADING' />
+                    <h2>loading...</h2>
+                </div>
             );
         } else {
-            // let images = [...this.props.imageLinks];
-            // images.map(link => {
-            //     return (
-            //         <img src={link} alt="movie poster" />
-            //     );
-            // });
-            // let images = this.props.imageLinks.map(link => {
-            //     return (
-            //         <img src={link} alt="movie poster" />
-            //     );
-            // });
-            // console.log(this.props.imageLinks[0]);
-            // console.log(this.props.shows.length);
             let rows = this.props.shows.map((show, i) => {
                 return <tr key={i}>
                             <th>{i + 1}</th>
                             <td>
-                                {/* <img src={this.props.imageLinks[i]} alt={'"' + show.show.title + '" poster.'} /> */}
-                                {/* {images[i]} */}
+                                <img
+                                    src={show.poster}
+                                    alt={'"' + show.title + '" poster.'}
+                                    width='100px'
+                                />
                             </td>
-                            <td>{show.show.title}</td>
-                            <td>{show.show.year}</td>
-                            <td>n/a</td>
+                            <td>{show.title}</td>
+                            <td>{show.year}</td>
+                            <td>{show.country}</td>
                         </tr>
             });
 
@@ -69,7 +56,6 @@ class Table extends Component {
 function mapStateToProps(state) {
     return {
         shows: state.shows,
-        imageLinks: state.imageLinks,
         isLoading: state.isLoading,
         tableCaption: state.tableCaption
     };

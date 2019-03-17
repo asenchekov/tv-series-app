@@ -23,42 +23,20 @@ function fetchData(state) {
         });
 
         const shows = getShowsData(state);
-        shows.then(data => onSuccess(data), error => onError(error));
+        shows.then(data => {
+            Promise.all(data.map(show => {
+                return getImagesData(show);
+            })).then(result => onSuccess({
+                shows: result
+            }));
+        }, error => onError(error));
 
-        function onSuccess(success) {
+        function onSuccess(payload) {
             return dispatch({
                 type: 'GET_API_DATA_READY',
                 data: {
-                    ...state,
-                    shows: success
-                }
-            });
-        }
-
-        function onError(error) {
-            return dispatch({
-                type: 'GET_API_DATA_ERROR',
-                error: error
-            });
-        }
-    }
-}
-
-function fetchImages(state) {
-    return dispatch => {
-        dispatch({
-            type: 'GET_API_DATA_START'
-        });
-        console.log(state);
-        const images = getImagesData(state.shows[0]);
-        images.then(data => onSuccess(data), error => onError(error));
-
-        function onSuccess(success) {
-            return dispatch({
-                type: 'GET_API_DATA_READY',
-                data: {
-                    ...state,
-                    imageLinks: success
+                    shows: payload.shows,
+                    imageLinks: payload.imageLinks
                 }
             });
         }
@@ -76,8 +54,7 @@ function getShowsData(state) {
     const apiUrl = 'https://api.trakt.tv/shows/';
     const { currentPage, limit, table } = state;
     const queryUrl = apiUrl + table + '?page=' + currentPage + '&limit=' + limit;
-    console.log(queryUrl);
-    
+
     return fetch(queryUrl, {
         method: "GET",
         headers: {
@@ -100,33 +77,29 @@ function getShowsData(state) {
 
 function getImagesData(show) {
     const params = '?api_key=bcdbbabd42939d9fe3b0800ec18a70cf&external_source=imdb_id';
-
-    console.log(show);
-        const queryUrl = 'https://api.themoviedb.org/3/find/' + show.show.ids.imdb + params;
-        
-        return fetch(queryUrl)
-            .then(response => {
-                if(response.status !== 200) {
-                    console.log('Looks like there was a problem. Status Code: ' +
-                        response.status);
-                    return;
-                }
-                return response.json();
-            })
-            .then(data => {
-                const link = 'https://image.tmdb.org/t/p/w200' + data.tv_results[0].poster_path;
-                console.log(link);
-                return link;
-            })
-            .catch(error  => {
-                console.log('Fetch Error : -S', error);
-            });
-    // });
-
-    // return {
-    //     ...state,
-    //     imageLinks: imageLinks
-    // }
+    const queryUrl = 'https://api.themoviedb.org/3/find/' + show.show.ids.imdb + params;
+    
+    return fetch(queryUrl)
+        .then(response => {
+            if(response.status !== 200) {
+                console.log('Looks like there was a problem. Status Code: ' +
+                    response.status);
+                return;
+            }
+            return response.json();
+        })
+        .then(data => {
+            const link = 'https://image.tmdb.org/t/p/w200' + data.tv_results[0].poster_path;
+            return {
+                title: show.show.title,
+                poster: link,
+                year: show.show.year,
+                country: data.tv_results[0].origin_country
+            };
+        })
+        .catch(error  => {
+            console.log('Fetch Error : -S', error);
+        });
 }
 
-export { nextPage, previousPage, fetchData, fetchImages };
+export { nextPage, previousPage, fetchData };
