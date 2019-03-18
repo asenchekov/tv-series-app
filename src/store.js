@@ -14,6 +14,8 @@ function reducer(state = initialState, action) {
             return {
                 ...state,
                 shows: action.data.shows,
+                countryList: action.data.countryList,
+                tableCaption: action.data.tableCaption,
                 isLoading: false,
             }
         case 'GET_API_DATA_ERROR':
@@ -37,7 +39,7 @@ function reducer(state = initialState, action) {
     isLoading: true,
     currentPage: 1,
     limit: 10,
-    tableCaption: 'Trending',
+    tableCaption: '',
     table: 'trending'
 };
 

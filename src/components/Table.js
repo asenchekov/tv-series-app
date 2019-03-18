@@ -26,7 +26,7 @@ class Table extends Component {
                             </td>
                             <td>{show.title}</td>
                             <td>{show.year}</td>
-                            <td>{show.country}</td>
+                            <td>{show.country ? show.country.join(', ') : "n/a"}</td>
                         </tr>
             });
 
