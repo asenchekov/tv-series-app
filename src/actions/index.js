@@ -1,7 +1,24 @@
 // action functions
 
-//function to get to next page of the search
-// needs updating now works only for trending page
+// Trakt API info in variables
+const traktApi = {
+    baseUrl:  'https://api.trakt.tv/',
+    headers: {
+        'Content-type': 'application/json',
+        'trakt-api-key': '38760291a0e06beeee9e5a43a2217cea8108ee0dc6d9a2fbcf784ac9aec2bdc3',
+        'trakt-api-version': 2
+    },
+    queryKeys: {
+        page: 'page=',
+        fields: 'fields=title',
+        limit: 'limit=',
+        years: 'years=',
+        countries: 'countries=',
+        query: 'query='
+    }
+}
+
+// function to get to next page of the search
 function nextPage(state) {
     return {
         ...state,
@@ -9,8 +26,7 @@ function nextPage(state) {
     };
 }
 
-//function to get to previous page of the search
-// needs updating now works only for trending page
+// function to get to previous page of the search
 function previousPage(state) {
     if(state.currentPage === 1) {
         return state;
@@ -21,87 +37,7 @@ function previousPage(state) {
     };
 }
 
-//function to fetch data for the current search
-// gets called when user presses search button
-//needs updating because its very similar to the fuction that gets initial data
-function getSearch(query) {
-    return dispatch => {
-        dispatch({
-            type: 'GET_API_DATA_START'
-        });
-
-        const getShows = getShowsQuery(query);
-
-        getShows.then(data => {
-            Promise.all(data.map(show => {
-                return getImagesData(show);
-            })).then(result => {
-                    fetch('https://api.trakt.tv/countries/shows', {
-                        headers: {
-                            'Content-type': 'application/json',
-                            'trakt-api-key': '38760291a0e06beeee9e5a43a2217cea8108ee0dc6d9a2fbcf784ac9aec2bdc3',
-                            'trakt-api-version': 2
-                        }
-                    }).then(response => response.json())
-                    .then(countryList => {
-                        onSuccess({
-                            shows: result,
-                            countryList: countryList,
-                            tableCaption: "Searching " + Object.values(query).join(', ')
-                        });
-                    });
-                });
-        }, error => onError(error));
-
-
-        function onSuccess(payload) {
-            return dispatch({
-                type: 'GET_API_DATA_READY',
-                data: {
-                    shows: payload.shows,
-                    countryList: payload.countryList,
-                    tableCaption: payload.tableCaption
-                }
-            });
-        }
-
-        function onError(error) {
-            return dispatch({
-                type: 'GET_API_DATA_ERROR',
-                error: error
-            });
-        }
-    }
-}
-
-//fetch function to get the searched info
-function getShowsQuery(query) {
-    
-    const queryUrl = `https://api.trakt.tv/search/show?page=1&years=${query.year}&fields=title&query=${query.string}&countries=${query.country}`;
-
-    return fetch(queryUrl, {
-        method: "GET",
-        headers: {
-            'Content-type': 'application/json',
-            'trakt-api-key': '38760291a0e06beeee9e5a43a2217cea8108ee0dc6d9a2fbcf784ac9aec2bdc3',
-            'trakt-api-version': 2
-        }
-    }).then(response => {
-        if(response.status !== 200) {
-            console.log('Looks like there was a problem. Status Code: ' +
-                response.status);
-            return;
-        }
-        return response.json();
-    }).then(data => {
-        console.log(data);
-        return data;
-    })
-    .catch(error => {
-        console.log('Fetch Error : -S', error);
-    });
-}
-
+// multiple dispatch function with redux thunk calls before monting the app component
 function fetchData(state) {
     return dispatch => {
         dispatch({
@@ -113,18 +49,14 @@ function fetchData(state) {
             Promise.all(data.map(show => {
                 return getImagesData(show);
             })).then(result => {
-                    fetch('https://api.trakt.tv/countries/shows', {
-                        headers: {
-                            'Content-type': 'application/json',
-                            'trakt-api-key': '38760291a0e06beeee9e5a43a2217cea8108ee0dc6d9a2fbcf784ac9aec2bdc3',
-                            'trakt-api-version': 2
-                        }
+                    fetch(traktApi.baseUrl + 'countries/shows', {
+                        headers: traktApi.headers
                     }).then(response => response.json())
                     .then(countryList => {
                         onSuccess({
                             shows: result,
                             countryList: countryList,
-                            tableCaption: "Trending"
+                            tableCaption: state.search ? "Search" : "Trending"
                         });
                     });
                 });
@@ -150,24 +82,25 @@ function fetchData(state) {
     }
 }
 
+// Used to get the shows data from trakt API
 function getShowsData(state) {
-    const apiUrl = 'https://api.trakt.tv/shows/';
-    const { currentPage, limit, table } = state;
-    const queryUrl = apiUrl + table + '?page=' + currentPage + '&limit=' + limit;
+    const { currentPage, search } = state;
+    let queryUrl = '';
+    if(!search) {
+        queryUrl = traktApi.baseUrl + 'shows/trending?' + traktApi.queryKeys.page + currentPage
+    } else {
+        queryUrl = `${traktApi.baseUrl}search/show?${traktApi.queryKeys.page + currentPage}&${traktApi.queryKeys.years + search.years}&fields=title&${traktApi.queryKeys.query + search.queryString}&${traktApi.queryKeys.countries + search.country}&limit=10`;
+    }
 
     return fetch(queryUrl, {
-        method: "GET",
-        headers: {
-            'Content-type': 'application/json',
-            'trakt-api-key': '38760291a0e06beeee9e5a43a2217cea8108ee0dc6d9a2fbcf784ac9aec2bdc3',
-            'trakt-api-version': 2
-        }
+        headers: traktApi.headers
     }).then(response => {
         if(response.status !== 200) {
             console.log('Looks like there was a problem. Status Code: ' +
                 response.status);
             return;
         }
+        console.log(response.headers.get("X-Pagination-Page-Count"));
         return response.json();
     }).then(data => data)
     .catch(error => {
@@ -175,6 +108,7 @@ function getShowsData(state) {
     });
 }
 
+// Used to fetch image links for posters
 function getImagesData(show) {
     const params = '?api_key=bcdbbabd42939d9fe3b0800ec18a70cf&external_source=imdb_id';
     const queryUrl = 'https://api.themoviedb.org/3/find/' + show.show.ids.imdb + params;
@@ -210,4 +144,4 @@ function getImagesData(show) {
         });
 }
 
-export { nextPage, previousPage, fetchData, getSearch };
+export { nextPage, previousPage, fetchData };

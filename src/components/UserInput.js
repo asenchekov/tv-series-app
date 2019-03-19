@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getSearch } from '../actions/index';
+import { fetchData } from '../actions/index';
+import store from '../store';
 
 import './UserInput.css';
 
@@ -8,12 +9,19 @@ import './UserInput.css';
 class UserInput extends Component {
     submitHandler = (event) => {
         event.preventDefault();
+        // {
+        //     addToUrl: 'shows/trending',
+        //     queryString: '',
+        //     years: '',
+        //     country: '',
+        // }
         const query = {
-            string: this.refs.searchString.value,
-            year: this.refs.searchYear.value,
+            queryString: this.refs.searchString.value,
+            years: this.refs.searchYear.value,
             country: this.refs.searchCountry.value
         }
-        this.props.dispatch(getSearch(query));
+        this.props.dispatch({ type: 'SEARCH_QUERY_SUBMIT', search: query });
+        this.props.dispatch(fetchData(store.getState()));
     }
 
     render() {
@@ -21,15 +29,14 @@ class UserInput extends Component {
             return null;
         }
 
-        const countryList = this.props.countryList.map(country => {
-            return <option value={country.code}>{country.name}</option>
+        const countryList = this.props.countryList.map((country, key) => {
+            return <option key={key} value={country.code}>{country.name}</option>
         });
 
         return (
             <form id="userInput" onSubmit={this.submitHandler}>
             Title : <input type="text"
                         ref="searchString"
-                        // required
                     />
             Year : <input type="number"
                         min="1900"
@@ -37,7 +44,7 @@ class UserInput extends Component {
                         ref="searchYear"
                     />
             Country: <select ref="searchCountry">
-                        <option value="" selected></option>
+                        <option defaultValue></option>
                         {countryList}
                     </select>
                 <button type="submit">Search...</button>

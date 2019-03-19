@@ -23,6 +23,12 @@ function reducer(state = initialState, action) {
                 ...state,
                 error: action.error
             }
+        case 'SEARCH_QUERY_SUBMIT':
+            return {
+                ...state,
+                currentPage: 1,
+                search: action.search
+            }
         case 'NEXT_PAGE':
             return nextPage(state);
 
@@ -38,9 +44,8 @@ function reducer(state = initialState, action) {
     shows: [],
     isLoading: true,
     currentPage: 1,
-    limit: 10,
     tableCaption: '',
-    table: 'trending'
+    search: null
 };
 
 const store = createStore(

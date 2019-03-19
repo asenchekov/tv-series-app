@@ -39,7 +39,7 @@ class Table extends Component {
                         <tr>
                             <th>Number</th>
                             <th>Poster</th>
-                            <th>Show name</th>
+                            <th>Title</th>
                             <th>Year</th>
                             <th>Country</th>
                         </tr>

@@ -7,7 +7,7 @@ import store from '../store';
 class ButtonNext extends Component {
     nextPage = () => {
         this.props.dispatch({ type: 'NEXT_PAGE' });
-        this.props.dispatch(fetchData( store.getState()));
+        this.props.dispatch(fetchData(store.getState()));
     }
 
     previousPage = () => {
