@@ -18,25 +18,6 @@ const traktApi = {
     }
 }
 
-// function to get to next page of the search
-function nextPage(state) {
-    return {
-        ...state,
-        currentPage: state.currentPage + 1
-    };
-}
-
-// function to get to previous page of the search
-function previousPage(state) {
-    if(state.currentPage === 1) {
-        return state;
-    }
-    return {
-        ...state,
-        currentPage: state.currentPage - 1
-    };
-}
-
 // multiple dispatch function with redux thunk calls before monting the app component
 function fetchData(state) {
     return dispatch => {
@@ -46,17 +27,19 @@ function fetchData(state) {
 
         const shows = getShowsData(state);
         shows.then(data => {
-            Promise.all(data.map(show => {
+            Promise.all(data.shows.map(show => {
                 return getImagesData(show);
             })).then(result => {
                     fetch(traktApi.baseUrl + 'countries/shows', {
                         headers: traktApi.headers
                     }).then(response => response.json())
                     .then(countryList => {
+                        console.log(data.isLastPage);
                         onSuccess({
                             shows: result,
                             countryList: countryList,
-                            tableCaption: state.search ? "Search" : "Trending"
+                            tableCaption: state.search ? "Search" : "Trending",
+                            isLastPage: data.isLastPage
                         });
                     });
                 });
@@ -68,7 +51,8 @@ function fetchData(state) {
                 data: {
                     shows: payload.shows,
                     countryList: payload.countryList,
-                    tableCaption: payload.tableCaption
+                    tableCaption: payload.tableCaption,
+                    isLastPage: payload.isLastPage
                 }
             });
         }
@@ -86,10 +70,14 @@ function fetchData(state) {
 function getShowsData(state) {
     const { currentPage, search } = state;
     let queryUrl = '';
+    let isLastPage = false;
     if(!search) {
-        queryUrl = traktApi.baseUrl + 'shows/trending?' + traktApi.queryKeys.page + currentPage
+        queryUrl = traktApi.baseUrl + 'shows/trending?page=' + currentPage
     } else {
-        queryUrl = `${traktApi.baseUrl}search/show?${traktApi.queryKeys.page + currentPage}&${traktApi.queryKeys.years + search.years}&fields=title&${traktApi.queryKeys.query + search.queryString}&${traktApi.queryKeys.countries + search.country}&limit=10`;
+        queryUrl = traktApi.baseUrl + 'search/show?page='
+                    + currentPage + '&years=' + search.years
+                    + '&fields=title&query=' + search.queryString
+                    + '&countries=' + search.country + '&limit=10';
     }
 
     return fetch(queryUrl, {
@@ -100,9 +88,17 @@ function getShowsData(state) {
                 response.status);
             return;
         }
-        console.log(response.headers.get("X-Pagination-Page-Count"));
+        const pageCount = response.headers.get("X-Pagination-Page-Count");
+        const thisPage = response.headers.get("X-Pagination-Page");
+        isLastPage = (pageCount === thisPage);
         return response.json();
-    }).then(data => data)
+    }).then(data => {
+        console.log(isLastPage);
+        return {
+            shows: data,
+            isLastPage: isLastPage
+        }
+    })
     .catch(error => {
         console.log('Fetch Error : -S', error);
     });
@@ -123,7 +119,7 @@ function getImagesData(show) {
             return response.json();
         })
         .then(data => {
-            if(data.tv_results.length !== 0) {
+            if(data.tv_results.length !== 0 && data.tv_results[0].poster_path) {
                 const link = 'https://image.tmdb.org/t/p/w200' + data.tv_results[0].poster_path;
                 return {
                     title: show.show.title,
@@ -144,4 +140,4 @@ function getImagesData(show) {
         });
 }
 
-export { nextPage, previousPage, fetchData };
+export { fetchData };

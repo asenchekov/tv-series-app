@@ -6,18 +6,24 @@ import store from '../store';
 
 class ButtonNext extends Component {
     nextPage = () => {
+        if(this.props.isLastPage) {
+            return;
+        }
         this.props.dispatch({ type: 'NEXT_PAGE' });
         this.props.dispatch(fetchData(store.getState()));
     }
 
     previousPage = () => {
+        if(this.props.currentPage === 1) {
+            return;
+        }
         this.props.dispatch({ type: 'PREVIOUS_PAGE' });
         this.props.dispatch(fetchData(store.getState()));
     }
 
     render() {
         return (
-            <div>
+            <div id="pagination">
                 <button onClick={this.previousPage}>PREV</button>
                 <span>{this.props.currentPage}</span>
                 <button onClick={this.nextPage}>NEXT</button>
@@ -28,7 +34,8 @@ class ButtonNext extends Component {
 
 function mapStateToProps(state) {
     return {
-        currentPage: state.currentPage
+        currentPage: state.currentPage,
+        isLastPage: state.isLastPage
     };
 }
 

@@ -3,11 +3,12 @@ import { Provider } from 'react-redux';
 import store from './store';
 import { fetchData } from './actions/index';
 
-import './App.css';
-import Header from './components/Header';
-import UserInput from './components/UserInput';
-import Table from './components/Table';
-import ButtonNext from './components/ButtonNext';
+import './static/css/App.css';
+
+import Header from './components/Header.jsx';
+import UserInput from './components/UserInput.jsx';
+import Table from './components/Table.jsx';
+import ButtonNext from './components/ButtonNext.jsx';
 
 
 class App extends Component {

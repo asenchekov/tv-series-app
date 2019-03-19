@@ -3,23 +3,17 @@ import { connect } from 'react-redux';
 import { fetchData } from '../actions/index';
 import store from '../store';
 
-import './UserInput.css';
-
 
 class UserInput extends Component {
     submitHandler = (event) => {
         event.preventDefault();
-        // {
-        //     addToUrl: 'shows/trending',
-        //     queryString: '',
-        //     years: '',
-        //     country: '',
-        // }
+
         const query = {
             queryString: this.refs.searchString.value,
             years: this.refs.searchYear.value,
             country: this.refs.searchCountry.value
         }
+
         this.props.dispatch({ type: 'SEARCH_QUERY_SUBMIT', search: query });
         this.props.dispatch(fetchData(store.getState()));
     }
@@ -34,21 +28,31 @@ class UserInput extends Component {
         });
 
         return (
-            <form id="userInput" onSubmit={this.submitHandler}>
-            Title : <input type="text"
+            <div id="userInput">
+                <form onSubmit={this.submitHandler}>
+                    <label htmlFor="searchString">Title: </label>
+                    <input
+                        type="text"
                         ref="searchString"
+                        name="searchString"
+                        placeholder="Search shows..."
                     />
-            Year : <input type="number"
+                    <label htmlFor="searchYear">Year: </label>
+                    <input type="number"
                         min="1900"
                         max={new Date().getFullYear()}
                         ref="searchYear"
+                        name="searchYear"
+                        // defaultValue={new Date().getFullYear()}
                     />
-            Country: <select ref="searchCountry">
+                    <label htmlFor="searchCountry">Country: </label>
+                    <select ref="searchCountry" name="searchCountry">
                         <option defaultValue></option>
                         {countryList}
                     </select>
-                <button type="submit">Search...</button>
-            </form>
+                    <button type="submit">Search...</button>
+                </form>
+            </div>
         );
     }
 }

@@ -1,5 +1,4 @@
 import { createStore, applyMiddleware } from 'redux';
-import { nextPage, previousPage } from './actions/index';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 
@@ -16,6 +15,7 @@ function reducer(state = initialState, action) {
                 shows: action.data.shows,
                 countryList: action.data.countryList,
                 tableCaption: action.data.tableCaption,
+                isLastPage: action.data.isLastPage,
                 isLoading: false,
             }
         case 'GET_API_DATA_ERROR':
@@ -30,10 +30,16 @@ function reducer(state = initialState, action) {
                 search: action.search
             }
         case 'NEXT_PAGE':
-            return nextPage(state);
+            return {
+                ...state,
+                currentPage: state.currentPage + 1
+            };
 
         case 'PREVIOUS_PAGE':
-            return previousPage(state);
+            return {
+                ...state,
+                currentPage: state.currentPage - 1
+            };
             
         default:
             return state;
@@ -45,6 +51,7 @@ function reducer(state = initialState, action) {
     isLoading: true,
     currentPage: 1,
     tableCaption: '',
+    isLastPage: false,
     search: null
 };
 
