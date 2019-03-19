@@ -19,7 +19,7 @@ class UserInput extends Component {
     }
 
     render() {
-        if(this.props.isLoading) {
+        if(this.props.isLoading || this.props.error) {
             return null;
         }
 
@@ -60,7 +60,8 @@ class UserInput extends Component {
 function mapStateToProps(state) {
     return {
         countryList: state.countryList,
-        isLoading: state.isLoading
+        isLoading: state.isLoading,
+        error: state.error
     };
 }
 

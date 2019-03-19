@@ -8,7 +8,7 @@ import './static/css/App.css';
 import Header from './components/Header.jsx';
 import UserInput from './components/UserInput.jsx';
 import Table from './components/Table.jsx';
-import ButtonNext from './components/ButtonNext.jsx';
+import Pagination from './components/Pagination.jsx';
 
 
 class App extends Component {
@@ -23,7 +23,7 @@ class App extends Component {
         <Header />
         <UserInput />
         <Table />
-        <ButtonNext />
+        <Pagination />
       </Provider>
     );
   }

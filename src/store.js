@@ -16,12 +16,14 @@ function reducer(state = initialState, action) {
                 countryList: action.data.countryList,
                 tableCaption: action.data.tableCaption,
                 isLastPage: action.data.isLastPage,
+                lastPageNumber: action.data.lastPageNumber,
                 isLoading: false,
             }
         case 'GET_API_DATA_ERROR':
             return {
                 ...state,
-                error: action.error
+                error: action.error,
+                isLoading: false
             }
         case 'SEARCH_QUERY_SUBMIT':
             return {
@@ -52,6 +54,7 @@ function reducer(state = initialState, action) {
     currentPage: 1,
     tableCaption: '',
     isLastPage: false,
+    error: false,
     search: null
 };
 

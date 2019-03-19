@@ -4,7 +4,7 @@ import { fetchData } from '../actions/index';
 import store from '../store';
 
 
-class ButtonNext extends Component {
+class Pagination extends Component {
     nextPage = () => {
         if(this.props.isLastPage) {
             return;
@@ -22,11 +22,20 @@ class ButtonNext extends Component {
     }
 
     render() {
+        if(this.props.shows.length === 0 || this.props.isLoading) {
+            return null;
+        }
         return (
             <div id="pagination">
-                <button onClick={this.previousPage}>PREV</button>
-                <span>{this.props.currentPage}</span>
-                <button onClick={this.nextPage}>NEXT</button>
+                <div id="prev">
+                    <button onClick={this.previousPage}>PREV</button>
+                </div>
+                <div>
+                    <p>page {this.props.currentPage} of {this.props.lastPageNumber}</p>
+                </div>
+                <div id="next">
+                    <button onClick={this.nextPage}>NEXT</button>
+                </div>
             </div>
         );
     }
@@ -34,9 +43,12 @@ class ButtonNext extends Component {
 
 function mapStateToProps(state) {
     return {
+        shows: state.shows,
         currentPage: state.currentPage,
-        isLastPage: state.isLastPage
+        isLastPage: state.isLastPage,
+        lastPageNumber: state.lastPageNumber,
+        isLoading: state.isLoading
     };
 }
 
-export default connect(mapStateToProps)(ButtonNext);
+export default connect(mapStateToProps)(Pagination);

@@ -7,14 +7,6 @@ const traktApi = {
         'Content-type': 'application/json',
         'trakt-api-key': '38760291a0e06beeee9e5a43a2217cea8108ee0dc6d9a2fbcf784ac9aec2bdc3',
         'trakt-api-version': 2
-    },
-    queryKeys: {
-        page: 'page=',
-        fields: 'fields=title',
-        limit: 'limit=',
-        years: 'years=',
-        countries: 'countries=',
-        query: 'query='
     }
 }
 
@@ -39,11 +31,12 @@ function fetchData(state) {
                             shows: result,
                             countryList: countryList,
                             tableCaption: state.search ? "Search" : "Trending",
-                            isLastPage: data.isLastPage
+                            isLastPage: data.isLastPage,
+                            lastPageNumber: data.lastPageNumber
                         });
                     });
                 });
-        }, error => onError(error));
+        }).catch(error => onError(error));
 
         function onSuccess(payload) {
             return dispatch({
@@ -52,7 +45,8 @@ function fetchData(state) {
                     shows: payload.shows,
                     countryList: payload.countryList,
                     tableCaption: payload.tableCaption,
-                    isLastPage: payload.isLastPage
+                    isLastPage: payload.isLastPage,
+                    lastPageNumber: payload.lastPageNumber
                 }
             });
         }
@@ -71,6 +65,7 @@ function getShowsData(state) {
     const { currentPage, search } = state;
     let queryUrl = '';
     let isLastPage = false;
+    let lastPageNumber;
     if(!search) {
         queryUrl = traktApi.baseUrl + 'shows/trending?page=' + currentPage
     } else {
@@ -88,7 +83,7 @@ function getShowsData(state) {
                 response.status);
             return;
         }
-        const pageCount = response.headers.get("X-Pagination-Page-Count");
+        const pageCount = lastPageNumber = response.headers.get("X-Pagination-Page-Count");
         const thisPage = response.headers.get("X-Pagination-Page");
         isLastPage = (pageCount === thisPage);
         return response.json();
@@ -96,11 +91,12 @@ function getShowsData(state) {
         console.log(isLastPage);
         return {
             shows: data,
-            isLastPage: isLastPage
+            isLastPage: isLastPage,
+            lastPageNumber
         }
     })
     .catch(error => {
-        console.log('Fetch Error : -S', error);
+        return error;
     });
 }
 
