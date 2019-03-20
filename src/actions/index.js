@@ -26,7 +26,6 @@ function fetchData(state) {
                         headers: traktApi.headers
                     }).then(response => response.json())
                     .then(countryList => {
-                        console.log(data.isLastPage);
                         onSuccess({
                             shows: result,
                             countryList: countryList,
@@ -88,7 +87,6 @@ function getShowsData(state) {
         isLastPage = (pageCount === thisPage);
         return response.json();
     }).then(data => {
-        console.log(isLastPage);
         return {
             shows: data,
             isLastPage: isLastPage,
