@@ -1,5 +1,5 @@
 {
-  "main.css": "/study-project/static/css/main.480c51e5.chunk.css",
+  "main.css": "/study-project/static/css/main.688423a6.chunk.css",
   "main.js": "/study-project/static/js/main.1f3dd024.chunk.js",
   "main.js.map": "/study-project/static/js/main.1f3dd024.chunk.js.map",
   "runtime~main.js": "/study-project/static/js/runtime~main.556a97a5.js",
@@ -7,7 +7,7 @@
   "static/js/2.2189ecf8.chunk.js": "/study-project/static/js/2.2189ecf8.chunk.js",
   "static/js/2.2189ecf8.chunk.js.map": "/study-project/static/js/2.2189ecf8.chunk.js.map",
   "index.html": "/study-project/index.html",
-  "precache-manifest.17bc2125ca4235c800c660739fb4657b.js": "/study-project/precache-manifest.17bc2125ca4235c800c660739fb4657b.js",
+  "precache-manifest.5aa1c3ebe7b4598a8a62176c3ef4ead4.js": "/study-project/precache-manifest.5aa1c3ebe7b4598a8a62176c3ef4ead4.js",
   "service-worker.js": "/study-project/service-worker.js",
-  "static/css/main.480c51e5.chunk.css.map": "/study-project/static/css/main.480c51e5.chunk.css.map"
+  "static/css/main.688423a6.chunk.css.map": "/study-project/static/css/main.688423a6.chunk.css.map"
 }
