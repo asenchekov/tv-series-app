@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchData } from '../actions/index';
-import store from '../store';
+import { fetchData } from '../store/actions/index';
+import store from '../store/store';
+import { NEXT_PAGE, PREVIOUS_PAGE } from '../store/actions/actionTypes';
 
 
 class Pagination extends Component {
@@ -9,7 +10,7 @@ class Pagination extends Component {
         if(this.props.isLastPage) {
             return;
         }
-        this.props.dispatch({ type: 'NEXT_PAGE' });
+        this.props.dispatch({ type: NEXT_PAGE });
         this.props.dispatch(fetchData(store.getState()));
     }
 
@@ -17,7 +18,7 @@ class Pagination extends Component {
         if(this.props.currentPage === 1) {
             return;
         }
-        this.props.dispatch({ type: 'PREVIOUS_PAGE' });
+        this.props.dispatch({ type: PREVIOUS_PAGE });
         this.props.dispatch(fetchData(store.getState()));
     }
 

@@ -1,3 +1,5 @@
+import { GET_API_DATA_START, GET_API_DATA_READY, GET_API_DATA_ERROR } from "./actionTypes";
+
 // action functions
 
 // Trakt API info in variables
@@ -10,12 +12,10 @@ const traktApi = {
     }
 }
 
-// multiple dispatch function with redux thunk calls before monting the app component
+// dispatch creator function with redux thunk calls before monting the app component
 function fetchData(state) {
     return dispatch => {
-        dispatch({
-            type: 'GET_API_DATA_START'
-        });
+        dispatch({type: GET_API_DATA_START});
 
         const shows = getShowsData(state);
         shows.then(data => {
@@ -26,37 +26,43 @@ function fetchData(state) {
                         headers: traktApi.headers
                     }).then(response => response.json())
                     .then(countryList => {
-                        onSuccess({
+                        const caption = state.search
+                            && state.search.queryString
+                            ? "Search '" + state.search.queryString + "'"
+                            : "Trending";
+                        dispatch(onSuccess({
                             shows: result,
                             countryList: countryList,
-                            tableCaption: state.search ? "Search" : "Trending",
+                            tableCaption: caption,
                             isLastPage: data.isLastPage,
                             lastPageNumber: data.lastPageNumber
-                        });
+                        }));
                     });
                 });
-        }).catch(error => onError(error));
+        }).catch(error => dispatch(onError(error)));
 
-        function onSuccess(payload) {
-            return dispatch({
-                type: 'GET_API_DATA_READY',
-                data: {
-                    shows: payload.shows,
-                    countryList: payload.countryList,
-                    tableCaption: payload.tableCaption,
-                    isLastPage: payload.isLastPage,
-                    lastPageNumber: payload.lastPageNumber
-                }
-            });
-        }
-
-        function onError(error) {
-            return dispatch({
-                type: 'GET_API_DATA_ERROR',
-                error: error
-            });
-        }
+        
     }
+}
+
+function onSuccess(payload) {
+    return {
+        type: GET_API_DATA_READY,
+        data: {
+            shows: payload.shows,
+            countryList: payload.countryList,
+            tableCaption: payload.tableCaption,
+            isLastPage: payload.isLastPage,
+            lastPageNumber: payload.lastPageNumber
+        }
+    };
+}
+
+function onError(error) {
+    return {
+        type: GET_API_DATA_ERROR,
+        error: error
+    };
 }
 
 // Used to get the shows data from trakt API
@@ -66,9 +72,9 @@ function getShowsData(state) {
     let isLastPage = false;
     let lastPageNumber;
     if(!search) {
-        queryUrl = traktApi.baseUrl + 'shows/trending?page=' + currentPage
+        queryUrl = traktApi.baseUrl + 'shows/trending?extended=full&page=' + currentPage
     } else {
-        queryUrl = traktApi.baseUrl + 'search/show?page='
+        queryUrl = traktApi.baseUrl + 'search/show?extended=full&page='
                     + currentPage + '&years=' + search.years
                     + '&fields=title&query=' + search.queryString
                     + '&countries=' + search.country + '&limit=10';
@@ -87,6 +93,7 @@ function getShowsData(state) {
         isLastPage = (pageCount === thisPage);
         return response.json();
     }).then(data => {
+        console.log(data);
         return {
             shows: data,
             isLastPage: isLastPage,
@@ -119,7 +126,7 @@ function getImagesData(show) {
                     title: show.show.title,
                     poster: link,
                     year: show.show.year,
-                    country: data.tv_results[0].origin_country
+                    country: show.show.country
                 };
             }
             return {

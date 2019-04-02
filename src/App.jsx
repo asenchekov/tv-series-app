@@ -1,22 +1,16 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import store from './store';
-import { fetchData } from './actions/index';
+import store from './store/store';
 
 import './static/css/App.css';
 
-import Header from './components/Header.jsx';
-import UserInput from './components/UserInput.jsx';
-import Table from './components/Table.jsx';
-import Pagination from './components/Pagination.jsx';
+import Header from './components/Header';
+import UserInput from './containers/UserInput';
+import Table from './containers/Table';
+import Pagination from './containers/Pagination';
 
 
 class App extends Component {
-  componentWillMount() {
-    store.dispatch(fetchData(store.getState()));
-  }
-  
-
   render() {
     return (
       <Provider store={store}>
