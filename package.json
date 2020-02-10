@@ -2,7 +2,7 @@
   "name": "study-project-app",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://asenchekov.github.io/study-project/",
+  "homepage": "https://asenchekov.github.io/tv-series-app/",
   "dependencies": {
     "gh-pages": "^2.0.1",
     "react": "^16.8.4",
