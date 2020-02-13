@@ -1,13 +1,13 @@
 {
-  "main.css": "/study-project/static/css/main.8d849f91.chunk.css",
-  "main.js": "/study-project/static/js/main.d75d1c3f.chunk.js",
-  "main.js.map": "/study-project/static/js/main.d75d1c3f.chunk.js.map",
-  "runtime~main.js": "/study-project/static/js/runtime~main.556a97a5.js",
-  "runtime~main.js.map": "/study-project/static/js/runtime~main.556a97a5.js.map",
-  "static/js/2.88c0f5a8.chunk.js": "/study-project/static/js/2.88c0f5a8.chunk.js",
-  "static/js/2.88c0f5a8.chunk.js.map": "/study-project/static/js/2.88c0f5a8.chunk.js.map",
-  "index.html": "/study-project/index.html",
-  "precache-manifest.ff878f5ef1da6389751afd9d649af783.js": "/study-project/precache-manifest.ff878f5ef1da6389751afd9d649af783.js",
-  "service-worker.js": "/study-project/service-worker.js",
-  "static/css/main.8d849f91.chunk.css.map": "/study-project/static/css/main.8d849f91.chunk.css.map"
+  "main.css": "/tv-series-app/static/css/main.3b85b6d7.chunk.css",
+  "main.js": "/tv-series-app/static/js/main.e2f53ba6.chunk.js",
+  "main.js.map": "/tv-series-app/static/js/main.e2f53ba6.chunk.js.map",
+  "runtime~main.js": "/tv-series-app/static/js/runtime~main.e45e760c.js",
+  "runtime~main.js.map": "/tv-series-app/static/js/runtime~main.e45e760c.js.map",
+  "static/js/2.10b3b001.chunk.js": "/tv-series-app/static/js/2.10b3b001.chunk.js",
+  "static/js/2.10b3b001.chunk.js.map": "/tv-series-app/static/js/2.10b3b001.chunk.js.map",
+  "index.html": "/tv-series-app/index.html",
+  "precache-manifest.05edbd67871df0b426fa79d3f94a6efe.js": "/tv-series-app/precache-manifest.05edbd67871df0b426fa79d3f94a6efe.js",
+  "service-worker.js": "/tv-series-app/service-worker.js",
+  "static/css/main.3b85b6d7.chunk.css.map": "/tv-series-app/static/css/main.3b85b6d7.chunk.css.map"
 }
